@@ -79,7 +79,7 @@ app.post("/verify", async (req, res) => {
     const UserData = await User.find({ Email: email, Password: password })
 
     if (UserData.length === 1) {
-      console.log("User Credentials Verified!")
+      console.log(`User ${email} logs in! Credentials Verified!`)
       res.status(200).json({verified: true,id: UserData[0]._id})
     } else {
       console.log("User doesnt exist!! or too many entries!")
