@@ -1,0 +1,30 @@
+{
+  "vendo": [
+    {
+      "remote_link": "http://8595-136-158-62-13.ngrok-free.app",
+      "name": "Inday wifi",
+      "dash_uname": "admin",
+      "dash_pass": "pisowifi_07",
+      "ng_email": "feynmanrichard11@gmail.com",
+      "ng_pass": "remoteaccesspisowifi2",
+      "daily_sales": "75.00",
+      "device_temp": "38",
+      "online_users": "4",
+      "status": "ok",
+      "id": 1
+    },
+    {
+      "remote_link": "http://cd7f-136-158-62-13.ngrok-free.app",
+      "name": "Thelma Wifi",
+      "dash_uname": "admin",
+      "dash_pass": "kenny@11",
+      "ng_email": "pisowifi.report@gmail.com",
+      "ng_pass": "ketchup_07",
+      "daily_sales": "21.00",
+      "device_temp": "48",
+      "online_users": "8",
+      "status": "ok",
+      "id": 2
+    }
+  ]
+}
