@@ -1,11 +1,7 @@
 import express from "express";
 import cors from 'cors';
-import path from 'path';
 import mongoose from "mongoose";
-
-import { spawnSync, spawn, exec } from "child_process";
-
-import { corsOptions } from "./config/corsOptions.js"
+import { exec } from "child_process";
 import Vendo from "./api/models/VendoModel.js";
 import User from "./api/models/UserModel.js";
 
@@ -15,7 +11,7 @@ const PORT = process.env.PORT || 5000;
 
 const app = express();
 
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(express.json())
 
 app.post("/add", (req, res) => {
