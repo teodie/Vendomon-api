@@ -6,6 +6,8 @@ import Vendo from "./api/models/VendoModel.js";
 import User from "./api/models/UserModel.js";
 
 import 'dotenv/config'
+import bcrypt from "bcrypt";
+import { match } from "assert";
 
 const PORT = process.env.PORT || 5000;
 
@@ -58,10 +60,16 @@ app.post("/addVendo", async (req, res) => {
 
 app.post("/adduser", async (req, res) => {
 
+  const Username = req.body.Username
+  const Email = req.body.Email
+  const hashedpass = await bcrypt.hash(req.body.Password, 10) // Salt 10
+
   try {
-    const user = await User.create(req.body)
+    const user = await User.create({Username, Email, Password:hashedpass})
     res.status(200).json(user)
-  } catch (error) { console.log(error); res.status(500).json({ message: error.message }) }
+  } 
+  catch (error) 
+  { console.log(error); res.status(500).json({ message: error.message }) }
 
 });
 
@@ -76,15 +84,20 @@ app.post("/verify", async (req, res) => {
     // const users = await User.find({Email: email, Password: password})
     // // get the number of items in the collection
 
-    const UserData = await User.find({ Email: email, Password: password })
+    const UserData = await User.find({ Email: email})
 
-    if (UserData.length === 1) {
+    // Check the the password is the same using the bcrypt.complere
+    const match = await bcrypt.compare(password, UserData[0].Password)
+
+    if (UserData.length === 1 && match) {
       console.log(`User ${email} logs in! Credentials Verified!`)
       res.status(200).json({verified: true,id: UserData[0]._id})
     } else {
       console.log("User doesnt exist!! or too many entries!")
       res.status(500).json({verified: false, message: "Either User dosnt exist or 2 or more duplicates" })
     }
+
+
 
   } catch (error) {
     console.log(error)
