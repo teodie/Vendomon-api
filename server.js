@@ -5,9 +5,12 @@ import { exec } from "child_process";
 import Vendo from "./api/models/VendoModel.js";
 import User from "./api/models/UserModel.js";
 import { logger, logEvents } from "./middleware/logger.js";
-
+import { errorHandler } from "./middleware/errorHandler.js";
+import cookieParser from "cookie-parser";
 import 'dotenv/config'
 import bcrypt from "bcrypt";
+
+
 
 const PORT = process.env.PORT || 5000;
 
@@ -16,8 +19,10 @@ const app = express();
 app.use(logger)
 
 app.use(cors());
+
 app.use(express.json())
 
+app.use(cookieParser())
 
 app.post("/add", (req, res) => {
 
@@ -252,6 +257,8 @@ app.post("/api", cors(), async (req, res) => {
 
 });
 
+// Change the default error handling in express
+app.use(errorHandler)
 
 mongoose.connect(process.env.CONNECTION_STRING)
   .then(() => {
