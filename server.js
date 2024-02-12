@@ -4,17 +4,20 @@ import mongoose from "mongoose";
 import { exec } from "child_process";
 import Vendo from "./api/models/VendoModel.js";
 import User from "./api/models/UserModel.js";
+import { logger, logEvents } from "./middleware/logger.js";
 
 import 'dotenv/config'
 import bcrypt from "bcrypt";
-import { match } from "assert";
 
 const PORT = process.env.PORT || 5000;
 
 const app = express();
 
+app.use(logger)
+
 app.use(cors());
 app.use(express.json())
+
 
 app.post("/add", (req, res) => {
 
@@ -250,7 +253,7 @@ app.post("/api", cors(), async (req, res) => {
 
 mongoose.connect(process.env.CONNECTION_STRING)
   .then(() => {
-    console.log("Successfully connected to the server!!")
+    console.log("Successfully connected to the Database!!")
     // Strart the server once connected
     app.listen(PORT, () => console.log(`Server now runnong on ${PORT}!!`));
   })
