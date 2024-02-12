@@ -67,9 +67,11 @@ app.post("/adduser", async (req, res) => {
   const Email = req.body.Email
   const hashedpass = await bcrypt.hash(req.body.Password, 10) // Salt 10
 
+
+
   try {
     const user = await User.create({Username, Email, Password:hashedpass})
-    res.status(200).json(user)
+    res.status(201).json(user)
   } 
   catch (error) 
   { console.log(error); res.status(500).json({ message: error.message }) }
