@@ -9,7 +9,7 @@ import { errorHandler } from "./middleware/errorHandler.js";
 import cookieParser from "cookie-parser";
 import 'dotenv/config'
 import bcrypt from "bcrypt";
-
+import router from "./routes/userRoutes.js"
 
 
 const PORT = process.env.PORT || 5000;
@@ -23,6 +23,9 @@ app.use(cors());
 app.use(express.json())
 
 app.use(cookieParser())
+
+app.use('/users', router)
+
 
 app.post("/add", (req, res) => {
 
@@ -247,7 +250,7 @@ app.post("/api", cors(), async (req, res) => {
     await Vendo.updateMany({userid: uid } , {$set: {last_request_time: fetchtime}})
 
     // Find all vendo data that has the same user id
-    const VendoData = await Vendo.find({ userid: uid })
+    const VendoData = await Vendo.find({ userid: uid }).select('-dashboard_password -ngrok_password')
     res.status(200).json(VendoData)
 
   } catch (error) {
