@@ -15,7 +15,7 @@ def GetRemoteLink(Email, Pwd):
     driver_path = "C:/Users/Teodi_07/AwesomeProject/server/chromedriver-win64/chromedriver.exe"
     # This 2 lines allow to run the chrome headless
     options = webdriver.ChromeOptions()
-    options.add_argument('--headless')
+    # options.add_argument('--headless')
 
     with webdriver.Chrome(service=ChromeService(driver_path), options=options) as driver:
         driver.get(URL)

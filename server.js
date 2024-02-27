@@ -7,10 +7,10 @@ import User from "./api/models/UserModel.js";
 import { logger, logEvents } from "./middleware/logger.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import cookieParser from "cookie-parser";
-import 'dotenv/config'
+import 'dotenv/config';
 import bcrypt from "bcrypt";
-import router from "./routes/userRoutes.js"
-
+import userRouter from "./routes/userRoutes.js"
+import vendoRouter from "./routes/vendoRoutes.js";
 
 const PORT = process.env.PORT || 5000;
 
@@ -24,8 +24,9 @@ app.use(express.json())
 
 app.use(cookieParser())
 
-app.use('/users', router)
+app.use('/users', userRouter)
 
+app.use('/vendo', vendoRouter)
 
 app.post("/add", (req, res) => {
 

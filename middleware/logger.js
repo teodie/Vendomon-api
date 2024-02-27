@@ -38,17 +38,17 @@ export const logEvents = async (message, logFileName) => {
 }
 
 export const logger = (req, res, next) => {
-
+  const request_path = req.path;
   // This block of code is executed when the server is ready to send the response
   // Added just to capture the statuscode 
   res.on('finish', () => {
 
-    const message = `${req.method}\t${req.url}\t${res.statusCode}\t${req.headers['user-agent']}\t${req.headers.origin}`
+    const message = `${req.method}\t${request_path}\t${res.statusCode}\t${req.headers['user-agent']}\t${req.headers.origin}`
     logEvents(message, 'reqLog.log')
 
   });
 
-  console.log(`${req.method} ${req.path}`)
+  console.log(`${req.method} ${request_path}`)
 
   next()
 }

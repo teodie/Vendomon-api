@@ -6,11 +6,13 @@ This script do the following:
 
 from datetime import datetime, timezone
 import time
+import json
 
 from Remotelingparser import GetRemoteLink
 from getsales import getsales
 from ScrapeOtherdata import get_otherdata
 import requests
+from Decrypt.Decrypt import decrypt
 
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
@@ -21,16 +23,10 @@ cluster = MongoClient(uri, server_api=ServerApi('1'))
 db = cluster["test"]
 collection = db["vendos"]
 
-
 def fetchdata():
-  # Send a ping to confirm a successful connection
   try:
-      cluster.admin.command('ping')
-
-      collec = collection.find({})
-
-      return collec
-
+    return collection.find({})
+  
   except Exception as e:
       print(e)
       return "error"
@@ -61,10 +57,10 @@ def Checkdata():
 
     # Check if user is online if the elapsed time is 5min from the last request and the current time
     # This code will assume that user is offline and will not update the vendo data that user own
-    if not (isonline(vendo["last_request_time"])):
-       continue
+    # if not (isonline(vendo["last_request_time"])):
+    #    continue
   
-
+    
     print("Starting update for:", vendo['vendo_name'])
 
     id = vendo["_id"]
@@ -88,7 +84,8 @@ def Checkdata():
 
       # This block of code will try to connect to the vendo
       print("Failed to load the saved remonte link \nParsing new link..")
-      remlink = GetRemoteLink(email, password)
+      decPassword = decrypt(password)
+      remlink = GetRemoteLink(email, decPassword)
 
       print("remote_link:", remlink)
 
@@ -120,8 +117,8 @@ def Checkdata():
         collection.update_one( {"_id": id}, {"$set": {'status': status, "remote_link": remotelink}})
 
     else:
-
-      dailysales = getsales(uname, pwd, remotelink)
+      decPwd = decrypt(pwd)
+      dailysales = getsales(uname, decPwd, remotelink)
       otherdata = get_otherdata(remotelink)
 
       collection.update_one({"_id": id}, {"$set": {'status': status, 'daily_sales': dailysales, 'online_users': otherdata[0], 'device_temp': otherdata[1] }})

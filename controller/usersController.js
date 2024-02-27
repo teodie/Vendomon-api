@@ -8,8 +8,8 @@ import bcrypt from "bcrypt";
 // @access Private
 export const getAllUsers = expressAsyncHandler(
   async (req, res) => {
-    const users = await User.find({}).lean()
-    console.log(!users?.length)
+    const users = await User.find({}).select("-Password").lean()
+    // console.log(!users?.length)
     if(!users?.length){
       return res.status(400).json({message: "No Users found!"});
     } 

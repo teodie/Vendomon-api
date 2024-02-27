@@ -4,6 +4,7 @@ const vendoSchema = mongoose.Schema(
   {
     userid: {
       type: String,
+      required: [true, "Name is required!!"]
     },
     remote_link: {
       type: String,
