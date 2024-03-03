@@ -1,11 +1,15 @@
 import express from "express";
 const vendoRouter = express.Router()
-import { getAllVendo, createNewVendo } from "../controller/vendoController.js"
+import { getAllVendo, createNewVendo, updateVendoName, deleteVendo, getVendo } from "../controller/vendoController.js"
 
 vendoRouter.route('/')
 .get(getAllVendo)
 .post(createNewVendo)
-.patch()
-.delete()
+
+vendoRouter.route('/:vendoId')
+.get(getVendo)
+.patch(updateVendoName)
+.delete(deleteVendo)
+
 
 export default vendoRouter

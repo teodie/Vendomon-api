@@ -1,6 +1,7 @@
 import Vendo from "../api/models/VendoModel.js"
 import expressAsyncHandler from "express-async-handler";
 import Cryptr from "cryptr";
+import bcrypt from "bcrypt";
 import 'dotenv/config'
 const cryptr = new Cryptr(process.env.ENCRYPTION_KEY);
 
@@ -68,25 +69,53 @@ export const createNewVendo = expressAsyncHandler(async (req, res) => {
 }
 ) 
 
+// @desc Get Vendo
+// @method GET /vendo/id
+// @access
+export const getVendo = expressAsyncHandler(
+  async (req, res ) => { 
+    const id = req.params.vendoId
+
+    const vendo = await Vendo.findOne({_id : id})
+
+    if(!vendo){
+      return res.status(404).json({message: "Vendo not found"})
+    }
+
+    res.status(200).json(vendo); }
+)
 
 // @desc Update Vendo
-// @method PATCH /vendo
+// @method PATCH /vendo/id
 // @access
-export const updateVendo = expressAsyncHandler(async (req, res) => {
+export const updateVendoName = expressAsyncHandler(async (req, res) => {
+    const id = req.params.vendoId;
+    const newName = req.body.name;
 
+    if(!id || !newName){
+      return res.status(400).json({message: "Id and name is required"})
+    }
+    
+    await Vendo.updateOne({_id: id},{$set: {vendo_name: newName}})
+
+    res.status(200).json({message: "successfull"})
 }
 ) 
 
 
 // @desc delete Vendo
-// @method DELETE /vendo
+// @method DELETE /vendo/Id
 // @access
 export const deleteVendo = expressAsyncHandler(async (req, res) => {
+  const id = req.params.vendoId;
+
+  const vendo = await Vendo.findByIdAndDelete(id);
+  
+  if(!vendo){
+    return res.status(404).json({message: `Vendo with id ${id} not found.`})
+  }
+
+  return res.status(200).json({message: 'Vendo data has been deleted'})
 
 }
 ) 
-
-
-
-
-
